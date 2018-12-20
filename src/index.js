@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import BaseLayout from 'components/BaseLayout';
+import Homepage from 'components/Homepage'
 
 const theme = createMuiTheme({
     palette: {
@@ -22,9 +23,11 @@ const theme = createMuiTheme({
 ReactDOM.render(
     <BrowserRouter>
         <MuiThemeProvider theme={theme}>
-            <Switch>
-                <Route exact path='/' component={App}/>
-            </Switch>
+            <BaseLayout>
+                <Switch>
+                    <Route exact path='/' component={Homepage}/>
+                </Switch>
+            </BaseLayout>
         </MuiThemeProvider>
     </BrowserRouter>
 ,    document.getElementById('root'));
