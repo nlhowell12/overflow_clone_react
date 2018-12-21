@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Chip from 'components/Chip'
+import UpvoteButton from 'components/UpvoteButton'
+import DownvoteButton from 'components/DownvoteButton'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = {
   card: {
@@ -24,43 +27,60 @@ const styles = {
   },
 };
 
-const getAuthor = async (url) => {
-    const response = await fetch(url)
-    const author = await response.json()
-    return await author
-}
+class Question extends Component {
+    state = {
+        author: '',
+        tags: []
+    }
 
-function Question(props) {
-  const { classes, question } = props;
-  const bull = <span className={classes.bullet}>•</span>;
+    getAuthor = async (url) => {
+        const response = await fetch(url)
+        const author = await response.json()
+        this.setState({author: author})
+    }
 
-  return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-            
-        </Typography>
-        <Typography variant="h5" component="h2">
-          be
-          {bull}
-          nev
-          {bull}o{bull}
-          lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card>
+    getTags = (urls) => {
+        urls.map(async url => {
+            const response = await fetch(url)
+            const tag = await response.json()
+            this.setState({
+                ...this.state,
+                tags: [...this.state.tags, tag]
+            })
+        })
+    }
+    componentWillMount = () => {
+        const { question } = this.props
+        this.getAuthor(question.author)
+        this.getTags(question.tags)
+    }
+
+    render() {
+    const { classes, question } = this.props;
+    const { author, tags } = this.state
+    return (
+        <ExpansionPanel>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography className={classes.heading}>
+                {question.body}
+                {tags.map(tag => {
+                    return <Chip key={tag} tag={tag.title}/>
+                })}
+                </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
+                <Typography variant='h5'>{author.name}</Typography>
+                <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                    sit amet blandit leo lobortis eget.
+                </Typography>
+                <div style={{display: 'flex'}}>
+                    <UpvoteButton/><DownvoteButton/>
+                </div>
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
   );
+}
 }
 
 Question.propTypes = {
