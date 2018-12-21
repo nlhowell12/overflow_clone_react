@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Question from 'components/Question'
-import Paper from '@material-ui/core/Paper'
+import CommonContainer from 'components/CommonContainer'
+import FilterButtons from './FilterButtons';
 
 
 class Homepage extends Component {
@@ -19,18 +20,21 @@ class Homepage extends Component {
         this.getQuestions()
     }
 
+    handleclick = async (query) => {
+        const response = await fetch('http://localhost:8000/questions/' + query)
+        let questions = await response.json()
+        this.setState({questions: questions.results})
+    };
+
     render() {
         const { questions } = this.state;
         return (
-            <div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: 'auto', width: '700px', height: '100%'}}>
-                    <Paper>
+            <CommonContainer>
+                <FilterButtons handleclick={ this.handleclick }/>
                     {questions.map(question => {
                         return <Question key={question.body} question={question}/>
                     })}    
-                    </Paper>
-                </div>
-            </div>
+            </CommonContainer>
         )
     }
 }
