@@ -9,11 +9,8 @@ class Homepage extends Component {
     }
 
     getQuestions = async () => {
-        const questions = await fetch('http://localhost:8000/questions', {
-            method: 'GET',
-            mode: 'no-cors'
-        })
-        console.log(questions)
+        const response = await fetch('http://localhost:8000/questions/')
+        let questions = await response.json()
         this.setState({questions: questions.results})
     }
 
@@ -25,10 +22,10 @@ class Homepage extends Component {
         const { questions } = this.state;
         return (
             <div>
-                <div>
-                    {/* {questions.map(question => {
+                <div style={{display: 'flex', flexDirection: 'column', margin: 'auto', width: '700px', height: '800px', border: '1px solid black'}}>
+                    {questions.map(question => {
                         return <Question question={question}/>
-                    })}     */}
+                    })}    
                 </div>
             </div>
         )
