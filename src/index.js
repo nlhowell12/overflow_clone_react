@@ -7,17 +7,17 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import BaseLayout from 'components/BaseLayout';
 import Homepage from 'components/Homepage'
 import QuestionForm from 'components/QuestionForm'
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 
 const theme = createMuiTheme({
     palette: {
         primary: {
-            light: '#0066ff',
-            main: '#3fb542',
-            contrastText: '#fff',
+            light: '#ffffff',
+            main: '#cfd8dc',
+            contrastText: '#102027',
         },
-        secondary: {
-            main: '#2196f3'
-        }
+
     }
 })
 
@@ -28,6 +28,8 @@ ReactDOM.render(
                 <Switch>
                     <Route exact path='/' component={Homepage}/>
                     <Route path='/newQuestion' component={QuestionForm}/>
+                    <Route exact path='/login' component={LoginForm}/>
+                    <Route exact path='/signup' component={SignupForm}/>
                 </Switch>
             </BaseLayout>
         </MuiThemeProvider>

@@ -3,6 +3,7 @@ import Question from 'components/Question';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
+import CommonContainer from 'components/CommonContainer'
 
 
 class Homepage extends Component {
@@ -24,16 +25,14 @@ class Homepage extends Component {
     render() {
         const { questions } = this.state;
         return (
-            <div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: 'auto', width: '700px', height: '100%'}}>
+            <CommonContainer>
                     <Paper>
                     {questions.map(question => {
                         return <Question key={question.body} question={question}/>
                     })}    
                     </Paper>
                     <Button onClick={evt => history.push('/newQuestion')}>Ask a Question!</Button>
-                </div>
-            </div>
+            </CommonContainer>
         )
     }
 }
