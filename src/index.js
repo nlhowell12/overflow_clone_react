@@ -6,6 +6,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles"
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import BaseLayout from 'components/BaseLayout';
 import Homepage from 'components/Homepage'
+import QuestionForm from 'components/QuestionForm'
 
 const theme = createMuiTheme({
     palette: {
@@ -26,6 +27,7 @@ ReactDOM.render(
             <BaseLayout>
                 <Switch>
                     <Route exact path='/' component={Homepage}/>
+                    <Route path='/newQuestion' component={QuestionForm}/>
                 </Switch>
             </BaseLayout>
         </MuiThemeProvider>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import Question from 'components/Question'
-import Paper from '@material-ui/core/Paper'
+import Question from 'components/Question';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
 
 
 class Homepage extends Component {
@@ -29,10 +31,11 @@ class Homepage extends Component {
                         return <Question key={question.body} question={question}/>
                     })}    
                     </Paper>
+                    <Button onClick={evt => history.push('/newQuestion')}>Ask a Question!</Button>
                 </div>
             </div>
         )
     }
 }
 
-export default Homepage
+export default withRouter(Homepage)
