@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { withRouter } from 'react-router-dom'
+import CommonContainer from 'components/CommonContainer';
+import { withRouter } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const styles = theme => ({
   container: {
@@ -33,15 +35,28 @@ class QuestionForm extends Component {
           [name]: event.target.value,
         });
       };
-
+    
       handleSubmit = async () => {
-
+        const { multiline } = this.state;
+        const { history } = this.props;
+        await fetch('http://localhost:8000/questions/new/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                body: multiline,
+                author: localStorage.user
+            })
+        })
+        history.push('/')
       }
 
     render() {
         const { classes } = this.props
         return (
-            <div>
+            <CommonContainer>
                 <TextField
                     id="outlined-multiline-flexible"
                     label="Question"
@@ -54,8 +69,8 @@ class QuestionForm extends Component {
                     helperText="Enter your question and then click submit"
                     variant="outlined"
                 />
-                <Button onClick={evt => this.handleSubmit}>Submit</Button>
-            </div>
+                <Button onClick={evt => this.handleSubmit()}>Submit</Button>
+            </CommonContainer>
         )
     }
 }

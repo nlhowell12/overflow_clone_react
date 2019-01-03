@@ -15,6 +15,7 @@ class Homepage extends Component {
     getQuestions = async () => {
         const response = await fetch('http://localhost:8000/questions/')
         let questions = await response.json()
+        console.log(questions)
         this.setState({questions: questions.results})
     }
 
@@ -24,6 +25,7 @@ class Homepage extends Component {
 
     render() {
         const { questions } = this.state;
+        const { history } = this.props;
         return (
             <CommonContainer>
                     <Paper>

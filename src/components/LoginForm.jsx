@@ -28,7 +28,6 @@ class LoginForm extends Component {
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
-        console.log(this.state)
     };
 
     handleLogin = (event, data) => {
@@ -43,6 +42,7 @@ class LoginForm extends Component {
             .then(res => res.ok ? res.json() : new Error('Something went wrong'))
             .then(json => {
                 localStorage.setItem('token', json.token);
+                localStorage.setItem('user', json.user.username)
             })
             .catch((error) => {
                 console.log(error)
