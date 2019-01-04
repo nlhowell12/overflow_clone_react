@@ -55,6 +55,25 @@ class Question extends Component {
         this.getTags(question.tags)
     }
 
+    upvote = async (question) => {
+        const response = await fetch('http://localhost:8000/questions/upvote/',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question,
+                user: localStorage.user
+            })
+        })
+        console.log(response)
+    }
+
+    downvote = async (question) => {
+
+    }
+
     render() {
     const { classes, question } = this.props;
     const { author, tags } = this.state
@@ -63,10 +82,10 @@ class Question extends Component {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
                 {question.body}
-                {tags.map(tag => {
-                    return <Chip key={tag} tag={tag.title}/>
-                })}
                 </Typography>
+                {tags.map(tag => {
+                    return <Chip key={tag.title} tag={tag.title}/>
+                })}
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
                 <Typography variant='h5'>{author.name}</Typography>
@@ -75,7 +94,7 @@ class Question extends Component {
                     sit amet blandit leo lobortis eget.
                 </Typography>
                 <div style={{display: 'flex'}}>
-                    <UpvoteButton/><DownvoteButton/>
+                    <UpvoteButton onClick={evt => this.upvote(question)}/>{}<DownvoteButton/>
                 </div>
             </ExpansionPanelDetails>
         </ExpansionPanel>
