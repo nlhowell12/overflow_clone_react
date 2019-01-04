@@ -58,7 +58,7 @@ class LoginForm extends Component {
 
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Login
-                            </Typography>
+                        </Typography>
 
                         <form onSubmit={e => this.handleLogin(e, this.state)}>
                             <TextField
