@@ -30,7 +30,9 @@ const styles = {
 class Question extends Component {
     state = {
         author: '',
-        tags: []
+        tags: [],
+        upvote: [],
+        downvote: []
     }
 
     getAuthor = async (url) => {
@@ -49,26 +51,72 @@ class Question extends Component {
             })
         })
     }
+
     componentWillMount = () => {
         const { question } = this.props
         this.getAuthor(question.author)
         this.getTags(question.tags)
+        this.setState({
+            ...this.state,
+            upvote: question.upvote,
+            downvote: question.downvote
+        })
+    }
+
+    upvote = async () => {
+        const { question } = this.props; 
+        const response = await fetch('http://localhost:8000/questions/upvote/',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question,
+                user: localStorage.user
+            })
+        })
+        const votes = await response.json()
+        this.setState({
+            ...this.state,
+            upvote: votes.upvote,
+            downvote: votes.downvote
+        })
+    }
+
+    downvote = async () => {
+        const { question } = this.props; 
+        const response = await fetch('http://localhost:8000/questions/downvote/',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question,
+                user: localStorage.user
+            })
+        })
+        const votes = await response.json()
+        this.setState({
+            ...this.state,
+            upvote: votes.upvote,
+            downvote: votes.downvote
+        })
     }
 
     render() {
     const { classes, question } = this.props;
-    const { author, tags } = this.state
+    const { author, tags, upvote, downvote } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
                 {question.body}
                 </Typography>
-                <div>
                 {tags.map(tag => {
-                    return <Chip key={tag} tag={tag.title}/>
-                })}  
-                </div>
+                    return <Chip key={tag.title} tag={tag.title}/>
+                })}
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
                 <Typography variant='h5'>{author.name}</Typography>
@@ -77,7 +125,7 @@ class Question extends Component {
                     sit amet blandit leo lobortis eget.
                 </Typography>
                 <div style={{display: 'flex'}}>
-                    <UpvoteButton/><DownvoteButton/>
+                    <UpvoteButton onClick={this.upvote}/>{upvote.length - downvote.length}<DownvoteButton onClick={this.downvote}/>
                 </div>
             </ExpansionPanelDetails>
         </ExpansionPanel>
