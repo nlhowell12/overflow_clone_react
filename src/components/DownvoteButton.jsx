@@ -17,7 +17,7 @@ function DownvoteButton(props) {
   const { classes } = props;
   return (
     <div>
-      <Fab size='small' color="primary" aria-label="Add" className={classes.fab}>
+      <Fab size='small' color="primary" aria-label="Add" className={classes.fab} onClick={props.onClick}>
         <RemoveIcon />
       </Fab>
     </div>
