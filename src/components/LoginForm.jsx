@@ -42,6 +42,7 @@ class LoginForm extends Component {
             .then(res => res.ok ? res.json() : new Error('Something went wrong'))
             .then(json => {
                 localStorage.setItem('token', json.token);
+                localStorage.setItem('user', json.user.username)
             })
             .catch((error) => {
                 console.log(error)
@@ -57,7 +58,7 @@ class LoginForm extends Component {
 
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Login
-                            </Typography>
+                        </Typography>
 
                         <form onSubmit={e => this.handleLogin(e, this.state)}>
                             <TextField

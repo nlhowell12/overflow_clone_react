@@ -41,6 +41,7 @@ const MenuProps = {
   },
 };
 
+
 class MultipleSelect extends Component {
   render() {
     const { classes, onChange, tags, selectedTags } = this.props;
