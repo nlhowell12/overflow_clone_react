@@ -30,23 +30,25 @@ class LoginForm extends Component {
         this.setState({ [prop]: event.target.value });
     };
 
-    handleLogin = (event, data) => {
-        event.preventDefault()
-        fetch('http://localhost:8000/token-auth/', {
+    handleLogin = async (data) => {
+        const { history } = this.props;
+        const { username, password } = this.state
+        await fetch('http://localhost:8000/token-auth/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                username,
+                password,
+              })
         })
-            .then(res => res.ok ? res.json() : new Error('Something went wrong'))
+            .then(res => res.json())
             .then(json => {
                 localStorage.setItem('token', json.token);
                 localStorage.setItem('user', json.user.username)
             })
-            .catch((error) => {
-                console.log(error)
-            });
+            history.push("/")
     };
 
     render() {
@@ -59,8 +61,6 @@ class LoginForm extends Component {
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Login
                         </Typography>
-
-                        <form onSubmit={e => this.handleLogin(e, this.state)}>
                             <TextField
                                 onChange={this.handleChange('username')}
                                 margin="normal"
@@ -74,9 +74,7 @@ class LoginForm extends Component {
                                 label="Password"
                                 fullWidth
                                 type="password" />
-                            <Button type="submit" className={classes.button} fullWidth variant="contained">Submit</Button>
-                        </form>
-
+                            <Button type="submit" onClick={ () => this.handleLogin() } className={classes.button} fullWidth variant="contained">Submit</Button>
                     </CardContent>
                 </Card>
             </CommonContainer>
