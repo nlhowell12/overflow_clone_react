@@ -63,10 +63,12 @@ class Question extends Component {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
                 {question.body}
+                </Typography>
+                <div>
                 {tags.map(tag => {
                     return <Chip key={tag} tag={tag.title}/>
-                })}
-                </Typography>
+                })}  
+                </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
                 <Typography variant='h5'>{author.name}</Typography>
