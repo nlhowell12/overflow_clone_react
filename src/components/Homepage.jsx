@@ -9,17 +9,35 @@ import FilterButtons from './FilterButtons';
 class Homepage extends Component {
 
     state = {
-        questions: []
+        questions: [],
+        user: {}
     }
 
     getQuestions = async () => {
         const response = await fetch('http://localhost:8000/questions/serve')
         let questions = await response.json()
-        this.setState({ questions: questions })
+        this.setState({ questions: questions})
+    }
+
+    getInfo = async () => {
+        const user = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                author: localStorage.user
+              })
+        })
+        let user_obj = await user.json()
+        this.setState({ user: user_obj })
     }
 
     componentWillMount = () => {
         this.getQuestions()
+        if (localStorage.user) {
+            this.getInfo()
+        }
     }
 
     handleclick = async (query) => {
@@ -29,14 +47,14 @@ class Homepage extends Component {
     };
 
     render() {
-        const { questions } = this.state;
+        const { questions, user } = this.state;
         const { history } = this.props;
         return (
             <CommonContainer>
-                <Button onClick={evt => history.push('/newQuestion')}>Ask a Question!</Button>
+                <Button onClick={() => history.push('/newQuestion')}>Ask a Question!</Button>
                 <FilterButtons handleclick={this.handleclick} />
                 {questions.map(question => {
-                    return <Question key={question.body} question={question} />
+                    return <Question key={question.id} id={question.id} question={question} favorited={ user.favorites.includes(question.id) ? true : false } />
                 })}
             </CommonContainer>
         )

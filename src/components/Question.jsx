@@ -13,6 +13,11 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Comment from 'components/Comment'
 import Paper from '@material-ui/core/Paper'
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import Favorite from '@material-ui/icons/Favorite';
+
 
 const styles = {
     card: {
@@ -38,7 +43,8 @@ class Question extends Component {
         comments: [],
         upvote: [],
         downvote: [],
-        answer: {}
+        answer: {},
+        favorite: this.props.favorited
     }
 
     componentWillMount = () => {
@@ -143,9 +149,28 @@ class Question extends Component {
         })
     }
 
+    handleFavorite = async () => {
+        const { id } = this.props;
+        const response = await fetch('http://localhost:8000/questions/favorite/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id,
+                    user: localStorage.user
+                })
+            })
+        const response_json = await response.json()
+        this.setState({
+            favorite: response_json.favorite,
+        })
+    }
+
     render() {
     const { classes, question } = this.props;
-    const { author, comments, upvote, downvote, answer } = this.state
+    const { author, comments, upvote, downvote, answer, favorite } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -192,7 +217,12 @@ class Question extends Component {
                     })}
                 </div>
                 
-            </ExpansionPanelDetails>    
+            </ExpansionPanelDetails> 
+            <ExpansionPanelActions>
+                <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
+                    {favorite ? <Favorite /> : <FavoriteBorder /> }
+                </IconButton>
+            </ExpansionPanelActions>   
         </ExpansionPanel>
   );
 }
