@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,12 +11,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -23,10 +24,6 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
   },
   title: {
     display: 'none',
@@ -85,14 +82,25 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  button: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  }
 });
 
 class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    loggedIn: Boolean(localStorage.user)
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.loggedIn !== Boolean(localStorage.user)) {
+      this.setState({ loggedIn: Boolean(localStorage.user) });
+    }
+  }
+  
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -110,9 +118,15 @@ class PrimarySearchAppBar extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleLogout = () => {
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    this.handleMenuClose();
+  };
+
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const { anchorEl, mobileMoreAnchorEl, loggedIn } = this.state;
+    const { classes, history } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -126,6 +140,7 @@ class PrimarySearchAppBar extends React.Component {
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
         <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
       </Menu>
     );
 
@@ -162,14 +177,55 @@ class PrimarySearchAppBar extends React.Component {
       </Menu>
     );
 
+    const renderUserMenu = (
+      <React.Fragment>
+        <div className={classes.sectionDesktop}>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Badge badgeContent={17} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+            aria-haspopup="true"
+            onClick={this.handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+        </div>
+        <div className={classes.sectionMobile}>
+          <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+            <MoreIcon />
+          </IconButton>
+        </div>
+      </React.Fragment>
+    );
+
+    const renderSignupLogin = (
+      <React.Fragment>
+        <div className={classes.sectionDesktop}>
+          <Button className={classes.button} onClick={evt => history.push('/login')}>Login</Button>
+          <Button className={classes.button} onClick={evt => history.push('/signup')}color="secondary" variant="contained">Sign Up</Button>
+        </div>
+        <div className={classes.sectionMobile}>
+          <IconButton aria-haspopup="true" color="inherit">
+            <MoreIcon />
+          </IconButton>
+        </div>
+      </React.Fragment>
+    )
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography className={classes.title} onClick={evt => history.push('/')} variant="h6" color="inherit" noWrap>
               Kenzie Overflow
             </Typography>
             <div className={classes.search}>
@@ -185,31 +241,7 @@ class PrimarySearchAppBar extends React.Component {
               />
             </div>
             <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
+            {loggedIn ? renderUserMenu : renderSignupLogin}
           </Toolbar>
         </AppBar>
         {renderMenu}
@@ -223,4 +255,4 @@ PrimarySearchAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PrimarySearchAppBar);
+export default withStyles(styles)(withRouter(PrimarySearchAppBar));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -41,8 +41,8 @@ const MenuProps = {
   },
 };
 
-class MultipleSelect extends React.Component {
 
+class MultipleSelect extends Component {
   render() {
     const { classes, onChange, tags, selectedTags } = this.props;
 

@@ -14,27 +14,29 @@ import Button from '@material-ui/core/Button'
 import Comment from 'components/Comment'
 
 const styles = {
-  card: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
+    card: {
+        minWidth: 275,
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
 };
 
 class Question extends Component {
     state = {
         author: '',
         comment: '',
-        comments: []
+        comments: [],
+        upvote: [],
+        downvote: []
     }
 
     componentWillMount = () => {
@@ -42,7 +44,9 @@ class Question extends Component {
         this.setState({
             ...this.state,
             author: question.author,
-            comments: question.comments
+            comments: question.comments,
+            upvote: question.upvote,
+            downvote: question.downvote
         })
     }
 
@@ -75,9 +79,51 @@ class Question extends Component {
        })
     }
 
+    upvote = async () => {
+        const { question } = this.props;
+        const response = await fetch('http://localhost:8000/questions/upvote/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question,
+                    user: localStorage.user
+                })
+            })
+        const votes = await response.json()
+        this.setState({
+            ...this.state,
+            upvote: votes.upvote,
+            downvote: votes.downvote
+        })
+    }
+
+    downvote = async () => {
+        const { question } = this.props;
+        const response = await fetch('http://localhost:8000/questions/downvote/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question,
+                    user: localStorage.user
+                })
+            })
+        const votes = await response.json()
+        this.setState({
+            ...this.state,
+            upvote: votes.upvote,
+            downvote: votes.downvote
+        })
+    }
+
     render() {
     const { classes, question } = this.props;
-    const { author, comments } = this.state
+    const { author, comments, upvote, downvote } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -97,7 +143,7 @@ class Question extends Component {
                     sit amet blandit leo lobortis eget.
                 </Typography>
                 <div style={{display: 'flex'}}>
-                    <UpvoteButton/><DownvoteButton/>
+                <UpvoteButton onClick={this.upvote} />{upvote.length - downvote.length}<DownvoteButton onClick={this.downvote} />
                 </div>
                 <div>
                     <TextField
@@ -129,7 +175,7 @@ class Question extends Component {
 }
 
 Question.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Question);
