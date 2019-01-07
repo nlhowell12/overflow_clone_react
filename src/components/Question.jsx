@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Comment from 'components/Comment'
+import Paper from '@material-ui/core/Paper'
 
 const styles = {
     card: {
@@ -143,7 +144,9 @@ class Question extends Component {
                     sit amet blandit leo lobortis eget.
                 </Typography>
                 <div style={{display: 'flex'}}>
-                <UpvoteButton onClick={this.upvote} />{upvote.length - downvote.length}<DownvoteButton onClick={this.downvote} />
+                <UpvoteButton onClick={this.upvote} />
+                <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
+                <DownvoteButton onClick={this.downvote} />
                 </div>
                 <div>
                     <TextField
