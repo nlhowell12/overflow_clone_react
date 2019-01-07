@@ -3,11 +3,13 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import UpvoteButton from 'components/UpvoteButton';
 import DownvoteButton from 'components/DownvoteButton';
+import AnswerButton from 'components/AnswerButton';
 
 class Comment extends Component {
     state = {
         upvote: [],
-        downvote: []
+        downvote: [],
+        answer: {}
     }
 
     componentWillMount = () => {
@@ -60,9 +62,11 @@ class Comment extends Component {
         })
     }
 
+    
+
     render() {
-        const { comment } = this.props;
-        const { upvote, downvote } = this.state;
+        const { comment, question, answer } = this.props;
+        const { upvote, downvote} = this.state;
         return (
             <Paper style={{paddingLeft: '5px', paddingRight: '5px', display: 'flex'}}>
                 <div>
@@ -73,6 +77,8 @@ class Comment extends Component {
                     <UpvoteButton onClick={this.upvote} />
                     <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
                     <DownvoteButton onClick={this.downvote} />
+                    {localStorage.user === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
+                    
                 </div>
             </Paper>
         )
