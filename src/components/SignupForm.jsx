@@ -20,25 +20,47 @@ const styles = theme => ({
 
 class SignupForm extends Component {
 
+    state = {
+        username: '',
+        password: ''
+    }
 
+    handleChange = prop => event => {
+        this.setState({ [prop]: event.target.value });
+    };
+
+    handleSignup = async () => {
+        const { username, password } = this.state;
+        const { history } = this.props;
+        await fetch('http://localhost:8000/core/users/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username,
+                password,
+            })
+        })
+        history.push('/login')
+    }
 
     render() {
         const { classes } = this.props;
         return (
             <CommonContainer>
-                    <Card>
-                        <CardContent>
-                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                Signup
+                <Card>
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Signup
                             </Typography>
-                            <form method="POST" action="http://localhost:8000/core/users/" >
-                                <TextField margin="normal" variant="outlined" label="Email" fullWidth />
-                                <TextField margin="normal" variant="outlined" label="Username" fullWidth name="username"/>
-                                <TextField margin="normal" variant="outlined" label="Password" fullWidth name="password" type="password" />
-                                <Button type="submit" className={classes.button} fullWidth variant="contained">Submit</Button>
-                            </form>
-                        </CardContent>
-                    </Card>
+                        {/* <TextField onChange={this.handleChange('email')} margin="normal" variant="outlined" label="Email" fullWidth /> */}
+                        <TextField onChange={this.handleChange('username')} margin="normal" variant="outlined" label="Username" fullWidth />
+                        <TextField onChange={this.handleChange('password')} margin="normal" variant="outlined" label="Password" fullWidth type="password" />
+                        <Button onClick={() => this.handleSignup()} className={classes.button} fullWidth variant="contained">Submit</Button>
+                    </CardContent>
+                </Card>
             </CommonContainer>
         )
     }
