@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Comment from 'components/Comment'
+import Paper from '@material-ui/core/Paper'
 
 const styles = {
     card: {
@@ -36,7 +37,8 @@ class Question extends Component {
         comment: '',
         comments: [],
         upvote: [],
-        downvote: []
+        downvote: [],
+        answer: {}
     }
 
     componentWillMount = () => {
@@ -46,7 +48,8 @@ class Question extends Component {
             author: question.author,
             comments: question.comments,
             upvote: question.upvote,
-            downvote: question.downvote
+            downvote: question.downvote,
+            answer: question.answer
         })
     }
 
@@ -120,10 +123,29 @@ class Question extends Component {
             downvote: votes.downvote
         })
     }
+    
+    selectAnswer = async (comment) => {
+        const { question } = this.props;
+        const response = await fetch('http://localhost:8000/comments/answer/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                comment,
+                question
+            })
+        })
+        const answer = await response.json()
+        this.setState({
+            ...this.state,
+            answer: answer
+        })
+    }
 
     render() {
     const { classes, question } = this.props;
-    const { author, comments, upvote, downvote } = this.state
+    const { author, comments, upvote, downvote, answer } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -143,7 +165,9 @@ class Question extends Component {
                     sit amet blandit leo lobortis eget.
                 </Typography>
                 <div style={{display: 'flex'}}>
-                <UpvoteButton onClick={this.upvote} />{upvote.length - downvote.length}<DownvoteButton onClick={this.downvote} />
+                <UpvoteButton onClick={this.upvote} />
+                <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
+                <DownvoteButton onClick={this.downvote} />
                 </div>
                 <div>
                     <TextField
@@ -164,7 +188,7 @@ class Question extends Component {
                 <div>
                     <Typography variant='h6'><u>Comments</u></Typography>
                     {comments.map(comment => {
-                        return <Comment key={comment.body} comment={comment}/>
+                        return <Comment key={comment.body} comment={comment} question={question} selectAnswer={this.selectAnswer} answer={answer}/>
                     })}
                 </div>
                 
