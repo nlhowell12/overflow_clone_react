@@ -14,10 +14,10 @@ class Homepage extends Component {
     }
 
     getQuestions = async () => {
-        const response = await fetch('http://localhost:8000/questions/')
+        const response = await fetch('http://localhost:8000/questions/serve')
         let questions = await response.json()
         console.log(questions)
-        this.setState({ questions: questions.results })
+        this.setState({ questions: questions })
     }
 
     componentWillMount = () => {

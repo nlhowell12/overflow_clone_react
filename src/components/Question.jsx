@@ -9,6 +9,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button'
+import Comment from 'components/Comment'
 
 const styles = {
   card: {
@@ -30,34 +33,51 @@ const styles = {
 class Question extends Component {
     state = {
         author: '',
-        tags: []
+        comment: '',
+        comments: []
     }
 
-    getAuthor = async (url) => {
-        const response = await fetch(url)
-        const author = await response.json()
-        this.setState({author: author})
-    }
-
-    getTags = (urls) => {
-        urls.map(async url => {
-            const response = await fetch(url)
-            const tag = await response.json()
-            this.setState({
-                ...this.state,
-                tags: [...this.state.tags, tag]
-            })
+    componentWillMount = () => {
+        const { question } = this.props;
+        this.setState({
+            ...this.state,
+            author: question.author,
+            comments: question.comments
         })
     }
-    componentWillMount = () => {
-        const { question } = this.props
-        this.getAuthor(question.author)
-        this.getTags(question.tags)
+
+    handleComment = name => event => {
+        this.setState({
+          ...this.state,
+          [name]: event.target.value,
+        });
+      };
+    
+    submitComment = async () => {
+       const { comment } = this.state;
+       const { question } = this.props;
+       const response = await fetch('http://localhost:8000/comments/new/', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           },
+           body: JSON.stringify({
+               comment,
+               question,
+               author: localStorage.user
+           })
+       }) 
+       const newComment = await response.json()
+       this.setState({
+           ...this.state,
+           comments: [...this.state.comments, newComment],
+           comment: ''
+       })
     }
 
     render() {
     const { classes, question } = this.props;
-    const { author, tags } = this.state
+    const { author, comments } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -65,8 +85,8 @@ class Question extends Component {
                 {question.body}
                 </Typography>
                 <div>
-                {tags.map(tag => {
-                    return <Chip key={tag} tag={tag.title}/>
+                {question.tags.map(tag => {
+                    return <Chip key={tag} tag={tag}/>
                 })}  
                 </div>
             </ExpansionPanelSummary>
@@ -79,7 +99,30 @@ class Question extends Component {
                 <div style={{display: 'flex'}}>
                     <UpvoteButton/><DownvoteButton/>
                 </div>
-            </ExpansionPanelDetails>
+                <div>
+                    <TextField
+                        id="outlined-full-width"
+                        label="Comment"
+                        placeholder="Enter text here"
+                        helperText="Leave a comment to be selected as a possible answer."
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={this.handleComment('comment')}
+                    />
+                    <Button onClick={this.submitComment}>Leave Comment</Button>
+                </div>
+                <div>
+                    <Typography variant='h6'><u>Comments</u></Typography>
+                    {comments.map(comment => {
+                        return <Comment key={comment.body} comment={comment}/>
+                    })}
+                </div>
+                
+            </ExpansionPanelDetails>    
         </ExpansionPanel>
   );
 }
