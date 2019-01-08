@@ -170,12 +170,13 @@ class Question extends Component {
 
     render() {
     const { classes, question } = this.props;
-    const { author, comments, upvote, downvote, answer, favorite } = this.state
+    const { comments, upvote, downvote, answer, favorite } = this.state
+    console.log(question)
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography className={classes.heading}>
-                {question.body}
+                {question.title}
                 </Typography>
                 <div>
                 {question.tags.map(tag => {
@@ -184,15 +185,14 @@ class Question extends Component {
                 </div>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
-                <Typography variant='h5'>{author.name}</Typography>
+                <Typography variant='h5'>{question.author}</Typography>
                 <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
+                    {question.body}
                 </Typography>
                 <div style={{display: 'flex'}}>
-                <UpvoteButton onClick={this.upvote} />
+                {localStorage.user ? <UpvoteButton onClick={this.upvote} /> :  null}
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
-                <DownvoteButton onClick={this.downvote} />
+                {localStorage.user ? <DownvoteButton onClick={this.downvote} /> : null}
                 </div>
                 <div>
                     <TextField
@@ -219,9 +219,13 @@ class Question extends Component {
                 
             </ExpansionPanelDetails> 
             <ExpansionPanelActions>
-                <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
+                {
+                    localStorage.user ? 
+                    <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
                     {favorite ? <Favorite /> : <FavoriteBorder /> }
-                </IconButton>
+                    </IconButton> : null
+                }
+                
             </ExpansionPanelActions>   
         </ExpansionPanel>
   );

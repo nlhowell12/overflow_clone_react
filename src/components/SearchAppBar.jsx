@@ -92,8 +92,17 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    loggedIn: Boolean(localStorage.user)
+    loggedIn: Boolean(localStorage.user),
+    notifications: [],
+    notificationMenu: false,
+    mobileNotificationMenu: false
   };
+
+  componentWillMount = () => {
+    if (localStorage.user) {
+      this.getNotifications()
+    }
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.loggedIn !== Boolean(localStorage.user)) {
@@ -110,6 +119,27 @@ class PrimarySearchAppBar extends React.Component {
     this.handleMobileMenuClose();
   };
 
+  handleNotificationMenuOpen = () => {
+    this.setState({
+      notificationMenu: true
+    })
+  }
+
+  handleMobileNotificationMenuOpen = () => {
+    this.setState({
+      mobileNotificationMenu: true
+    })
+  }
+
+  handleNotificationMenuClose = () => {
+    this.setState({ notificationMenu: false });
+    this.handleMobileNotificationMenuClose();
+  };
+
+  handleMobileNotificationMenuClose = () => {
+    this.setState({ mobileNotificationMenu: false });
+  };
+
   handleMobileMenuOpen = event => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
@@ -124,8 +154,25 @@ class PrimarySearchAppBar extends React.Component {
     this.handleMenuClose();
   };
 
+  getNotifications = async () => {
+    const response = await fetch('http://localhost:8000/notifications/serve/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user: localStorage.user
+        })
+    })
+    const notifications = await response.json()
+    this.setState({
+      ...this.state,
+      notifications: notifications
+    })
+}
+
   render() {
-    const { anchorEl, mobileMoreAnchorEl, loggedIn } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, loggedIn, notifications, notificationMenu } = this.state;
     const { classes, history } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -160,9 +207,9 @@ class PrimarySearchAppBar extends React.Component {
           </IconButton>
           <p>Messages</p>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={this.handleNotificationMenu}>
           <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
+            <Badge badgeContent={this.state.notifications.length} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -185,8 +232,8 @@ class PrimarySearchAppBar extends React.Component {
               <MailIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={17} color="secondary">
+          <IconButton color="inherit" onClick={this.handleNotificationMenuOpen}>
+            <Badge invisible={this.state.notifications.length === 0} badgeContent={this.state.notifications.length} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -220,7 +267,20 @@ class PrimarySearchAppBar extends React.Component {
         </div>
       </React.Fragment>
     )
-
+    
+    const renderNotifications = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={notificationMenu}
+        onClose={this.handleNotificationMenuClose}
+      >
+      {notifications.map(notification => {
+            return <MenuItem>{`${notification.answer_user} commented on ${notification.question} at ${notification.date}`}</MenuItem>  
+          })}
+      </Menu>
+    )
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -243,7 +303,8 @@ class PrimarySearchAppBar extends React.Component {
             <div className={classes.grow} />
             {loggedIn ? renderUserMenu : renderSignupLogin}
           </Toolbar>
-        </AppBar>
+        </AppBar>}
+        {renderNotifications}
         {renderMenu}
         {renderMobileMenu}
       </div>
