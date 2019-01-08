@@ -75,7 +75,11 @@ class Comment extends Component {
                 </div>
                 <div style={{display: 'flex'}}>
                     {localStorage.user ? <UpvoteButton onClick={this.upvote} /> :  null}
-                    <Paper style={{minWidth: '50px', maxHeight: '50px', margin: '5px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
+                    <Paper style={{minWidth: '50px', maxHeight: '50px', margin: '5px'}}>
+                        <Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>
+                            {upvote ? upvote.length - downvote.length : 0}
+                        </Typography>
+                    </Paper>
                     {localStorage.user ? <DownvoteButton onClick={this.downvote} /> : null}
                     {localStorage.user === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
                     
