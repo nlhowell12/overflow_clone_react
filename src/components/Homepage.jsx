@@ -54,7 +54,7 @@ class Homepage extends Component {
                 <Button onClick={() => history.push('/newQuestion')}>Ask a Question!</Button>
                 <FilterButtons handleclick={this.handleclick} />
                 {questions.map(question => {
-                    return <Question key={question.id} id={question.id} question={question} favorited={ user.favorites.includes(question.id) ? true : false } />
+                    return <Question key={question.id} id={question.id} question={question} favorited={ user.favorites && user.favorites.includes(question.id) ? true : false } />
                 })}
             </CommonContainer>
         )
