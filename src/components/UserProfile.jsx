@@ -30,7 +30,7 @@ class UserProfile extends Component {
     state = {
         user: {},
         favorites: [],
-        open: true
+        open: false
     }
 
 
@@ -63,7 +63,7 @@ class UserProfile extends Component {
     
 
     render() {
-        const { classes } = this.props
+        const { classes, history } = this.props
         console.log(this.state.favorites)
         return (
             <CommonContainer>
@@ -93,16 +93,8 @@ class UserProfile extends Component {
                         {this.state.open ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                        {/* <List component="div" disablePadding>
-                            <ListItem button className={classes.nested}>
-                                <ListItemText primary={this.state.user.favorite_obj[0].id} />
-                            </ListItem>
-                            <ListItem button className={classes.nested}>
-                                <ListItemText primary={this.state.favorites[1]} />
-                            </ListItem>
-                        </List> */}
                         {this.state.favorites.map(favorite => {
-                        return <span key={favorite.id}> { favorite.body }</span>
+                        return <List component="div" disablePadding><ListItem button onClick={() => history.push('/question/'+favorite.id+'/')} className={classes.nested}><ListItemText key={favorite.id}primary={favorite.body} /></ListItem></List>   
                 }
                 )}
                     </Collapse>
