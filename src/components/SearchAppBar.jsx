@@ -91,6 +91,7 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    mobileMoreAnchorEl_SL: null,
     loggedIn: Boolean(localStorage.user),
     notifications: [],
     notificationMenu: false,
@@ -147,6 +148,14 @@ class PrimarySearchAppBar extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleMobileSignupLoginOpen = event => {
+    this.setState({ mobileMoreAnchorEl_SL: event.currentTarget });
+  };
+
+  handleMobileSignupLoginClose = () => {
+    this.setState({ mobileMoreAnchorEl_SL: null });
+  };
+
   handleLogout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("token")
@@ -171,10 +180,11 @@ class PrimarySearchAppBar extends React.Component {
 }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, loggedIn, notifications, notificationMenu } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, mobileMoreAnchorEl_SL, loggedIn, notifications, notificationMenu } = this.state;
     const { classes, history } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const isMobileSignupLoginOpen = Boolean(mobileMoreAnchorEl_SL);
 
     const renderMenu = (
       <Menu
@@ -214,6 +224,23 @@ class PrimarySearchAppBar extends React.Component {
       </Menu>
     );
 
+    const renderMobileSignupLogin = (
+      <Menu
+        anchorEl={mobileMoreAnchorEl_SL}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMobileSignupLoginOpen}
+        onClose={this.handleMobileSignupLoginClose}
+      >
+        <MenuItem>
+          <Button className={classes.button} onClick={evt => history.push('/login')}>Login</Button>
+        </MenuItem>
+        <MenuItem>
+          <Button className={classes.button} onClick={evt => history.push('/signup')}color="secondary" variant="contained">Sign Up</Button>
+        </MenuItem>
+      </Menu>
+    );
+
     const renderUserMenu = (
       <React.Fragment>
         <div className={classes.sectionDesktop}>
@@ -246,7 +273,7 @@ class PrimarySearchAppBar extends React.Component {
           <Button className={classes.button} onClick={evt => history.push('/signup')}color="secondary" variant="contained">Sign Up</Button>
         </div>
         <div className={classes.sectionMobile}>
-          <IconButton aria-haspopup="true" color="inherit">
+          <IconButton aria-haspopup="true" color="inherit" onClick={this.handleMobileSignupLoginOpen}>
             <MoreIcon />
           </IconButton>
         </div>
@@ -295,6 +322,7 @@ class PrimarySearchAppBar extends React.Component {
         {renderNotifications}
         {renderMenu}
         {renderMobileMenu}
+        {renderMobileSignupLogin}
       </div>
     );
   }

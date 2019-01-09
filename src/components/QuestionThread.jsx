@@ -209,7 +209,7 @@ class QuestionThread extends Component {
         <Card>
         <CardHeader title={question.title}/>
           <CardContent>
-            <Typography>{question.body}</Typography>
+            <pre><Typography>{question.body}</Typography></pre>
 
             <div style={{ display: 'flex' }}>
 

@@ -185,9 +185,8 @@ class Question extends Component {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={{display: 'flex', flexDirection: 'column'}}>
                 <Typography variant='h5'>{question.author}</Typography>
-                <Typography>
-                    {question.body}
-                </Typography>
+                <pre><Typography>{question.body}</Typography></pre>
+                
                 <div style={{display: 'flex'}}>
                 {localStorage.user ? <UpvoteButton onClick={this.upvote} /> :  null}
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
