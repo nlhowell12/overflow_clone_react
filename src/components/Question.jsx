@@ -189,9 +189,9 @@ class Question extends Component {
                     {question.body}
                 </Typography>
                 <div style={{display: 'flex'}}>
-                {localStorage.user ? <UpvoteButton onClick={this.upvote} /> :  null}
+                {localStorage.user && localStorage.user !== question.author ? <UpvoteButton onClick={this.upvote} /> :  null}
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
-                {localStorage.user ? <DownvoteButton onClick={this.downvote} /> : null}
+                {localStorage.user && localStorage.user !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
                 </div>
                 <div>
                     <TextField
