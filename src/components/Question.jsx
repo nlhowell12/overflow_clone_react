@@ -170,7 +170,7 @@ class Question extends Component {
 
     render() {
     const { classes, question, history, id } = this.props;
-    const { author, comments, upvote, downvote, answer, favorite } = this.state
+    const { comments, upvote, downvote, answer, favorite } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
