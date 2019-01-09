@@ -16,7 +16,7 @@ class CommonContainer extends Component {
         return (
             <React.Fragment>
                 <Grid container justify="center" className={classes.grid} spacing={24}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={12} md={10}>
                         <Paper>
                             {this.props.children}
                         </Paper>
