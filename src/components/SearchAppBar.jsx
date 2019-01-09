@@ -13,7 +13,6 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
@@ -199,14 +198,6 @@ class PrimarySearchAppBar extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
         <MenuItem onClick={this.handleNotificationMenu}>
           <IconButton color="inherit">
             <Badge badgeContent={this.state.notifications.length} color="secondary">
@@ -227,11 +218,6 @@ class PrimarySearchAppBar extends React.Component {
     const renderUserMenu = (
       <React.Fragment>
         <div className={classes.sectionDesktop}>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
           <IconButton color="inherit" onClick={this.handleNotificationMenuOpen}>
             <Badge invisible={this.state.notifications.length === 0} badgeContent={this.state.notifications.length} color="secondary">
               <NotificationsIcon />
@@ -277,7 +263,10 @@ class PrimarySearchAppBar extends React.Component {
         onClose={this.handleNotificationMenuClose}
       >
       {notifications.map(notification => {
-            return <MenuItem>{`${notification.answer_user} commented on ${notification.question} at ${notification.date}`}</MenuItem>  
+            return  <MenuItem>
+                      {`${notification.answer_user} commented on ${notification.question} at ${notification.date}`}
+                      <Button size="small" onClick={evt => history.push('/question/' + notification.question_id )} >See thread</Button>
+                    </MenuItem>  
           })}
       </Menu>
     )

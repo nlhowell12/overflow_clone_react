@@ -17,7 +17,7 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Favorite from '@material-ui/icons/Favorite';
-
+import { withRouter, Link } from "react-router-dom";
 
 const styles = {
     card: {
@@ -169,9 +169,8 @@ class Question extends Component {
     }
 
     render() {
-    const { classes, question } = this.props;
-    const { comments, upvote, downvote, answer, favorite } = this.state
-    console.log(question)
+    const { classes, question, history, id } = this.props;
+    const { author, comments, upvote, downvote, answer, favorite } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -213,15 +212,18 @@ class Question extends Component {
                 <div>
                     <Typography variant='h6'><u>Comments</u></Typography>
                     {comments.map(comment => {
-                        return <Comment key={comment.body} comment={comment} question={question} selectAnswer={this.selectAnswer} answer={answer}/>
+                        return <Comment key={comment.id} comment={comment} question={question} selectAnswer={this.selectAnswer} answer={answer}/>
                     })}
                 </div>
                 
             </ExpansionPanelDetails> 
             <ExpansionPanelActions>
+                <Link to={`/question/${id}`}>
+                    <Button size="small" onClick={() => history.push('/question/' + id )} >See thread</Button>
+                </Link>
                 {
-                    localStorage.user ? 
-                    <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
+                    localStorage.user ?      
+                <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
                     {favorite ? <Favorite /> : <FavoriteBorder /> }
                     </IconButton> : null
                 }
@@ -236,4 +238,4 @@ Question.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Question);
+export default withStyles(styles)(withRouter(Question));

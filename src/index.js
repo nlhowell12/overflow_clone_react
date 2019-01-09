@@ -7,6 +7,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import BaseLayout from 'components/BaseLayout';
 import Homepage from 'components/Homepage'
 import QuestionForm from 'components/QuestionForm'
+import QuestionThread from 'components/QuestionThread'
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 
@@ -27,6 +28,7 @@ ReactDOM.render(
                 <Switch>
                     <Route exact path='/' component={Homepage}/>
                     <Route path='/newQuestion' component={QuestionForm}/>
+                    <Route path='/question/:questionId' component={QuestionThread}/>
                     <Route exact path='/login' component={LoginForm}/>
                     <Route exact path='/signup' component={SignupForm}/>
                 </Switch>
