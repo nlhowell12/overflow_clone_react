@@ -11,6 +11,7 @@ import QuestionThread from 'components/QuestionThread'
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import UserProfile from './components/UserProfile'
+import BioForm from './components/BioForm'
 
 const theme = createMuiTheme({
     palette: {
@@ -33,6 +34,7 @@ ReactDOM.render(
                     <Route exact path='/login' component={LoginForm}/>
                     <Route exact path='/signup' component={SignupForm}/>
                     <Route exact path='/profile' component={UserProfile}/>
+                    <Route exact path='/bio' component={BioForm}/>
                 </Switch>
             </BaseLayout>
         </MuiThemeProvider>
