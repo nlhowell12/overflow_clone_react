@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import UpvoteButton from 'components/UpvoteButton';
 import DownvoteButton from 'components/DownvoteButton';
 import AnswerButton from 'components/AnswerButton';
+import IconAvatar from 'components/IconAvatar';
+
 
 class Comment extends Component {
     state = {
@@ -84,6 +86,7 @@ class Comment extends Component {
                     </Paper>
                     {localStorage.author && localStorage.author !== comment.author ? <DownvoteButton onClick={this.downvote} /> : null}
                     {localStorage.author === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
+                    {answer.id === comment.id && localStorage.author === question.author ? <IconAvatar/> : null}
                     
                 </div>
             </Paper>
