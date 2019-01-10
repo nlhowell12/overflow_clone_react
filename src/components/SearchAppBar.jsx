@@ -25,6 +25,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   title: {
+    cursor: "pointer",
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -232,11 +233,11 @@ class PrimarySearchAppBar extends React.Component {
         open={isMobileSignupLoginOpen}
         onClose={this.handleMobileSignupLoginClose}
       >
-        <MenuItem>
-          <Button className={classes.button} onClick={evt => history.push('/login')}>Login</Button>
+        <MenuItem onClick={() => history.push('/login')}>
+          <Typography style={{paddingLeft: "20px", paddingRight: "20px"}}>Login</Typography>
         </MenuItem>
-        <MenuItem>
-          <Button className={classes.button} onClick={evt => history.push('/signup')}color="secondary" variant="contained">Sign Up</Button>
+        <MenuItem onClick={() => history.push('/signup')}>
+          <Typography style={{paddingLeft: "20px", paddingRight: "20px"}}color='secondary'>Signup</Typography>
         </MenuItem>
       </Menu>
     );
@@ -300,7 +301,7 @@ class PrimarySearchAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} onClick={evt => history.push('/')} variant="h6" color="inherit" noWrap>
+            <Typography style={{cursor: "pointer"}} className={classes.title} onClick={evt => history.push('/')} variant="h6" color="inherit" noWrap>
               Kenzie Overflow
             </Typography>
             <div className={classes.search}>

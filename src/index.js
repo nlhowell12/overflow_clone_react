@@ -23,6 +23,12 @@ const theme = createMuiTheme({
     }
 })
 
+const NoMatch = ({ location }) => (
+    <div>
+        404 - Not Found
+    </div>
+)
+
 ReactDOM.render(
     <BrowserRouter>
         <MuiThemeProvider theme={theme}>
@@ -35,6 +41,7 @@ ReactDOM.render(
                     <Route exact path='/signup' component={SignupForm}/>
                     <Route exact path='/profile' component={UserProfile}/>
                     <Route exact path='/bio' component={BioForm}/>
+                    <Route component={NoMatch}/>
                 </Switch>
             </BaseLayout>
         </MuiThemeProvider>

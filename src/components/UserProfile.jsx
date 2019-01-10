@@ -66,7 +66,6 @@ class UserProfile extends Component {
                 <List
                     component="nav"
                     subheader={<ListSubheader component="div">Hello {this.state.author.name}, here is some of your general info</ListSubheader>}
-                    className={classes.root}
                 >
                     <ListItem>
                         <ListItemText primary="author" secondary={this.state.author.name} />
