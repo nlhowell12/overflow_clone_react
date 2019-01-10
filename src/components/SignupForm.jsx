@@ -43,7 +43,16 @@ class SignupForm extends Component {
                 password,
             })
         })
-        history.push('/login')
+        .then(res => res.json())
+        .then(json => {
+            if (!username.length > 0 || !password.length > 0){ return; } 
+            if (json.username[0] === "A user with that username already exists.")(
+                window.alert(json.username[0])
+            )
+            else{
+                history.push('/login')
+            }
+        })
     }
 
     render() {
@@ -54,7 +63,7 @@ class SignupForm extends Component {
                     <CardContent>
                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                             Signup
-                            </Typography>
+                        </Typography>
                         {/* <TextField onChange={this.handleChange('email')} margin="normal" variant="outlined" label="Email" fullWidth /> */}
                         <TextField onChange={this.handleChange('username')} margin="normal" variant="outlined" label="Username" fullWidth />
                         <TextField onChange={this.handleChange('password')} margin="normal" variant="outlined" label="Password" fullWidth type="password" />

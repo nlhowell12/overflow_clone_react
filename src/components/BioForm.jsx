@@ -58,8 +58,6 @@ class BioForm extends Component {
     handleBioUpdate = async (data) => {
         const { history } = this.props;
         const { bio, author } = this.state
-        console.log(bio)
-        console.log(author)
         await fetch('http://localhost:8000/overflow-users/bio/', {
             method: 'POST',
             headers: {
