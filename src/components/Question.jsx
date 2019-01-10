@@ -170,7 +170,7 @@ class Question extends Component {
 
     render() {
     const { classes, question, history, id } = this.props;
-    const { author, comments, upvote, downvote, answer, favorite } = this.state
+    const { comments, upvote, downvote, answer, favorite } = this.state
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -189,11 +189,11 @@ class Question extends Component {
                     {question.body}
                 </Typography>
                 <div style={{display: 'flex'}}>
-                {localStorage.user ? <UpvoteButton onClick={this.upvote} /> :  null}
+                {localStorage.user && localStorage.user !== question.author ? <UpvoteButton onClick={this.upvote} /> :  null}
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
-                {localStorage.user ? <DownvoteButton onClick={this.downvote} /> : null}
+                {localStorage.user && localStorage.user !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
                 </div>
-                <div>
+                {localStorage.user ? <div>
                     <TextField
                         id="outlined-full-width"
                         label="Comment"
@@ -208,7 +208,7 @@ class Question extends Component {
                         onChange={this.handleComment('comment')}
                     />
                     <Button onClick={this.submitComment}>Leave Comment</Button>
-                </div>
+                </div> : null}
                 <div>
                     <Typography variant='h6'><u>Comments</u></Typography>
                     {comments.map(comment => {
