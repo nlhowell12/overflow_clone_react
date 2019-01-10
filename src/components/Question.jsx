@@ -77,7 +77,7 @@ class Question extends Component {
            body: JSON.stringify({
                comment,
                question,
-               author: localStorage.user
+               author: localStorage.author
            })
        }) 
        const newComment = await response.json()
@@ -97,8 +97,9 @@ class Question extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    question,
-                    user: localStorage.user
+                    id: question.id,
+                    author: localStorage.author,
+                    owner: question.author
                 })
             })
         const votes = await response.json()
@@ -118,8 +119,9 @@ class Question extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    question,
-                    user: localStorage.user
+                    id: question.id,
+                    author: localStorage.author,
+                    owner: question.author
                 })
             })
         const votes = await response.json()
@@ -159,7 +161,7 @@ class Question extends Component {
                 },
                 body: JSON.stringify({
                     id,
-                    user: localStorage.user
+                    author: localStorage.author
                 })
             })
         const response_json = await response.json()
@@ -189,11 +191,11 @@ class Question extends Component {
                     {question.body}
                 </Typography>
                 <div style={{display: 'flex'}}>
-                {localStorage.user && localStorage.user !== question.author ? <UpvoteButton onClick={this.upvote} /> :  null}
+                {localStorage.author && localStorage.author !== question.author ? <UpvoteButton onClick={this.upvote} /> :  null}
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
-                {localStorage.user && localStorage.user !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
+                {localStorage.author && localStorage.author !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
                 </div>
-                {localStorage.user ? <div>
+                {localStorage.author ? <div>
                     <TextField
                         id="outlined-full-width"
                         label="Comment"
@@ -222,7 +224,7 @@ class Question extends Component {
                     <Button size="small" onClick={() => history.push('/question/' + id )} >See thread</Button>
                 </Link>
                 {
-                    localStorage.user ?      
+                    localStorage.author ?      
                 <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
                     {favorite ? <Favorite /> : <FavoriteBorder /> }
                     </IconButton> : null

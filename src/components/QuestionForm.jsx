@@ -73,7 +73,7 @@ class QuestionForm extends Component {
       body: JSON.stringify({
         title: title,
         body: question,
-        author: localStorage.user,
+        author: localStorage.author,
         tags: selectedTags
       })
     })
