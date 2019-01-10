@@ -91,21 +91,21 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    loggedIn: Boolean(localStorage.user),
+    loggedIn: Boolean(localStorage.author),
     notifications: [],
     notificationMenu: false,
     mobileNotificationMenu: false
   };
 
   componentWillMount = () => {
-    if (localStorage.user) {
+    if (localStorage.author) {
       this.getNotifications()
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.loggedIn !== Boolean(localStorage.user)) {
-      this.setState({ loggedIn: Boolean(localStorage.user) });
+    if (prevState.loggedIn !== Boolean(localStorage.author)) {
+      this.setState({ loggedIn: Boolean(localStorage.author) });
     }
   }
   
@@ -148,7 +148,7 @@ class PrimarySearchAppBar extends React.Component {
   };
 
   handleLogout = () => {
-    localStorage.removeItem("user")
+    localStorage.removeItem("author")
     localStorage.removeItem("token")
     this.handleMenuClose();
   };
@@ -160,7 +160,7 @@ class PrimarySearchAppBar extends React.Component {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            user: localStorage.user
+            author: localStorage.author
         })
     })
     const notifications = await response.json()
@@ -262,7 +262,7 @@ class PrimarySearchAppBar extends React.Component {
         onClose={this.handleNotificationMenuClose}
       >
       {notifications.map(notification => {
-            return  <MenuItem>
+            return  <MenuItem key={notification.id}>
                       {`${notification.answer_user} commented on ${notification.question} at ${notification.date}`}
                       <Button size="small" onClick={evt => history.push('/question/' + notification.question_id )} >See thread</Button>
                     </MenuItem>  
@@ -291,7 +291,7 @@ class PrimarySearchAppBar extends React.Component {
             <div className={classes.grow} />
             {loggedIn ? renderUserMenu : renderSignupLogin}
           </Toolbar>
-        </AppBar>}
+        </AppBar>
         {renderNotifications}
         {renderMenu}
         {renderMobileMenu}

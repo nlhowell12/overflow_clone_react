@@ -10,7 +10,7 @@ class Homepage extends Component {
 
     state = {
         questions: [],
-        user: {}
+        author: {}
     }
 
     getQuestions = async () => {
@@ -20,22 +20,22 @@ class Homepage extends Component {
     }
 
     getInfo = async () => {
-        const user = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+        const author = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                author: localStorage.user
+                author: localStorage.author
               })
         })
-        let user_obj = await user.json()
-        this.setState({ user: user_obj })
+        let user_obj = await author.json()
+        this.setState({ author: user_obj })
     }
 
     componentWillMount = () => {
         this.getQuestions()
-        if (localStorage.user) {
+        if (localStorage.author) {
             this.getInfo()
         }
     }
@@ -43,18 +43,18 @@ class Homepage extends Component {
     handleclick = async (query) => {
         const response = await fetch('http://localhost:8000/questions/' + query)
         let questions = await response.json()
-        this.setState({ questions: questions.results })
+        this.setState({ questions: questions })
     };
 
     render() {
-        const { questions, user } = this.state;
+        const { questions, author } = this.state;
         const { history } = this.props;
         return (
             <CommonContainer>
                 <Button onClick={() => history.push('/newQuestion')}>Ask a Question!</Button>
                 <FilterButtons handleclick={this.handleclick} />
                 {questions.map(question => {
-                    return <Question key={question.id} id={question.id} question={question} favorited={ user.favorites && user.favorites.includes(question.id) ? true : false } />
+                    return <Question key={question.id} id={question.id} question={question} favorited={ author.favorites && author.favorites.includes(question.id) ? true : false } />
                 })}
             </CommonContainer>
         )

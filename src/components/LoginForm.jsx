@@ -46,8 +46,8 @@ class LoginForm extends Component {
             .then(res => res.json())
             .then(json => {
                 localStorage.setItem('token', json.token);
-                localStorage.setItem('user', json.user.username)
-                localStorage.setItem('url', json.user.url)
+                localStorage.setItem('author', json.author.username)
+                localStorage.setItem('url', json.author.url)
             })
             history.push("/")
     };

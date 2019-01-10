@@ -10,8 +10,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Question from 'components/Question';
-
 
 
 const styles = theme => ({
@@ -28,31 +26,31 @@ const styles = theme => ({
 
 class UserProfile extends Component {
     state = {
-        user: {},
+        author: {},
         favorites: [],
         open: false
     }
 
 
     componentWillMount = () => {
-        if (localStorage.user) {
+        if (localStorage.author) {
             this.getUserInfo()
         }
     };
 
     getUserInfo = async () => {
-      const user = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+      const author = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                author: localStorage.user
+                author: localStorage.author
                 })
         })
-        let user_obj = await user.json()
+        let user_obj = await author.json()
         this.setState({ 
-            user: user_obj,
+            author: user_obj,
             favorites:user_obj.favorite_obj
          })
     };
@@ -64,28 +62,27 @@ class UserProfile extends Component {
 
     render() {
         const { classes, history } = this.props
-        console.log(this.state.favorites)
         return (
             <CommonContainer>
                 <List
                     component="nav"
-                    subheader={<ListSubheader component="div">Hello {this.state.user.name}, here is some of your general info</ListSubheader>}
+                    subheader={<ListSubheader component="div">Hello {this.state.author.name}, here is some of your general info</ListSubheader>}
                     className={classes.root}
                 >
                     <ListItem>
-                        <ListItemText primary="User" secondary={this.state.user.name} />
+                        <ListItemText primary="author" secondary={this.state.author.name} />
                     </ListItem>
                         <Divider light component="li" />
                     <ListItem>
-                        <ListItemText primary="Bio" secondary={this.state.user.bio} />
+                        <ListItemText primary="Bio" secondary={this.state.author.bio} />
                     </ListItem>
                     <Divider light component="li" />
                     <ListItem>
-                        <ListItemText primary="Reputation" secondary={this.state.user.reputation} />
+                        <ListItemText primary="Reputation" secondary={this.state.author.reputation} />
                     </ListItem>
                     <Divider light component="li" />
                     <ListItem>
-                        <ListItemText primary="Interests" secondary={this.state.user.interests} />
+                        <ListItemText primary="Interests" secondary={this.state.author.interests} />
                     </ListItem>
                     <Divider light component="li" />
                     <ListItem button onClick={this.handleClick}>

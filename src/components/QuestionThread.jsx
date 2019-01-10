@@ -47,7 +47,7 @@ class QuestionThread extends Component {
 
   componentWillMount = () => {
     this.getQuestion()
-    if (localStorage.user) {
+    if (localStorage.author) {
       this.getUserInfo()
     }
   }
@@ -65,30 +65,31 @@ class QuestionThread extends Component {
         })
       })
     let question = await response.json()
+    console.log(question[0])
     this.setState({
       ...this.state,
-      question: question,
-      title: question.title,
-      author: question.author,
-      upvote: question.upvote,
-      downvote: question.downvote,
-      answer: question.answer,
-      comments: question.comments
+      question: question[0],
+      title: question[0].title,
+      author: question[0].author,
+      upvote: question[0].upvote || [],
+      downvote: question[0].downvote || [],
+      answer: question[0].answer,
+      comments: question[0].comments
     })
   }
 
   getUserInfo = async () => {
     const questionId = parseInt(this.props.match.params.questionId)
-    const user = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+    const author = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        author: localStorage.user
+        author: localStorage.author
       })
     })
-    let user_obj = await user.json()
+    let user_obj = await author.json()
     this.setState({ 
       favorite: Boolean(user_obj.favorites.includes(questionId))
      })
@@ -111,7 +112,7 @@ class QuestionThread extends Component {
       body: JSON.stringify({
         comment,
         question,
-        author: localStorage.user
+        author: localStorage.author
       })
     })
     const newComment = await response.json()
@@ -132,7 +133,7 @@ class QuestionThread extends Component {
         },
         body: JSON.stringify({
           question,
-          user: localStorage.user
+          author: localStorage.author
         })
       })
     const votes = await response.json()
@@ -153,7 +154,7 @@ class QuestionThread extends Component {
         },
         body: JSON.stringify({
           question,
-          user: localStorage.user
+          author: localStorage.author
         })
       })
     const votes = await response.json()
@@ -193,7 +194,7 @@ class QuestionThread extends Component {
         },
         body: JSON.stringify({
           id: questionId,
-          user: localStorage.user,
+          author: localStorage.author,
         })
       })
     const response_json = await response.json()
@@ -217,7 +218,7 @@ class QuestionThread extends Component {
 
               <Paper style={{ minWidth: '50px' }}>
                 <Typography variant='headline' align='center' style={{ position: 'relative', top: '50%', transform: 'translateY(-50%)' }}>
-                  {upvote.length - downvote.length}
+                  { upvote.length - downvote.length }
                 </Typography>
               </Paper>
 
@@ -242,12 +243,12 @@ class QuestionThread extends Component {
             </div>
             <div>
               <Typography variant='h6'><u>Comments</u></Typography>
-              {comments.map(comment => {
+              { comments.map(comment => {
                 return <Comment key={comment.id} id={comment.id} comment={comment} question={question} selectAnswer={this.selectAnswer} answer={answer} />
               })}
             </div>
             <CardActions>
-              { localStorage.user ?
+              { localStorage.author ?
                 <IconButton aria-haspopup="true" color="inherit" onClick={this.handleFavorite}>
                   {favorite ? <Favorite /> : <FavoriteBorder />}
                 </IconButton> :

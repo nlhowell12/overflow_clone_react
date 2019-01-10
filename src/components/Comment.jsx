@@ -29,8 +29,9 @@ class Comment extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    comment,
-                    user: localStorage.user
+                    id: comment.id,
+                    author: localStorage.author,
+                    owner: comment.author
                 })
             })
         const votes = await response.json()
@@ -50,8 +51,9 @@ class Comment extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    comment,
-                    user: localStorage.user
+                    id: comment.id,
+                    author: localStorage.author,
+                    owner: comment.author
                 })
             })
         const votes = await response.json()
@@ -66,7 +68,7 @@ class Comment extends Component {
 
     render() {
         const { comment, question, answer } = this.props;
-        const { upvote, downvote} = this.state;
+        const { upvote, downvote } = this.state;
         return (
             <Paper style={{paddingLeft: '5px', paddingRight: '5px', display: 'flex', justifyContent: 'space-between'}}>
                 <div>
@@ -74,14 +76,14 @@ class Comment extends Component {
                 <Typography>{comment.body}</Typography>
                 </div>
                 <div style={{display: 'flex'}}>
-                    {localStorage.user && localStorage.user !== comment.author ? <UpvoteButton onClick={this.upvote} /> :  null}
+                    {localStorage.author && localStorage.author !== comment.author ? <UpvoteButton onClick={this.upvote} /> :  null}
                     <Paper style={{minWidth: '50px', maxHeight: '50px', margin: '5px'}}>
                         <Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>
                             {upvote ? upvote.length - downvote.length : 0}
                         </Typography>
                     </Paper>
-                    {localStorage.user && localStorage.user !== comment.author ? <DownvoteButton onClick={this.downvote} /> : null}
-                    {localStorage.user === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
+                    {localStorage.author && localStorage.author !== comment.author ? <DownvoteButton onClick={this.downvote} /> : null}
+                    {localStorage.author === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
                     
                 </div>
             </Paper>
