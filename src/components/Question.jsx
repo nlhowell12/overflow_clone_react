@@ -193,7 +193,7 @@ class Question extends Component {
                 <Paper style={{minWidth: '50px'}}><Typography variant='headline' align='center' style={{position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>{upvote.length - downvote.length}</Typography></Paper>
                 {localStorage.user && localStorage.user !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
                 </div>
-                <div>
+                {localStorage.user ? <div>
                     <TextField
                         id="outlined-full-width"
                         label="Comment"
@@ -208,7 +208,7 @@ class Question extends Component {
                         onChange={this.handleComment('comment')}
                     />
                     <Button onClick={this.submitComment}>Leave Comment</Button>
-                </div>
+                </div> : null}
                 <div>
                     <Typography variant='h6'><u>Comments</u></Typography>
                     {comments.map(comment => {
