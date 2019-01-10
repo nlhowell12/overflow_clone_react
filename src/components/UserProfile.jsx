@@ -73,7 +73,7 @@ class UserProfile extends Component {
                     </ListItem>
                         <Divider light component="li" />
                     <ListItem button onClick={() => history.push('/bio')}>
-                        <ListItemText primary="Bio (click to edit)" secondary={this.state.user.bio} />
+                        <ListItemText primary="Bio (click to edit)" secondary={this.state.author.bio} />
                     </ListItem>
                     <Divider light component="li" />
                     <ListItem>

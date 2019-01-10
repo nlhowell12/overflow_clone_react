@@ -33,7 +33,7 @@ class BioForm extends Component {
                   'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                  author: localStorage.user
+                  author: localStorage.author
                   })
           })
           let user_obj = await user.json()
@@ -45,7 +45,7 @@ class BioForm extends Component {
       
 
       componentWillMount() {
-          if(localStorage.user)
+          if(localStorage.author)
           this.getUserInfo()
       }
 
