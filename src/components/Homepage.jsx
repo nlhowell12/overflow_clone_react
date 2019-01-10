@@ -20,7 +20,7 @@ class Homepage extends Component {
     }
 
     getInfo = async () => {
-        const author = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+        const author = await fetch('http://localhost:8000/overflow-users/overflow_user_profile/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
