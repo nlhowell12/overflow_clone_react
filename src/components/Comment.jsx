@@ -86,7 +86,7 @@ class Comment extends Component {
                     </Paper>
                     {localStorage.author && localStorage.author !== comment.author ? <DownvoteButton onClick={this.downvote} /> : null}
                     {localStorage.author === question.author ? <AnswerButton onClick={this.props.selectAnswer} question={question} comment={comment} answer={answer}/> : null}
-                    {answer.id === comment.id && localStorage.author === question.author ? <IconAvatar/> : null}
+                    {answer.id === comment.id && localStorage.author !== question.author ? <IconAvatar/> : null}
                     
                 </div>
             </Paper>
