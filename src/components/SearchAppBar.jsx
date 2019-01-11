@@ -25,6 +25,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   title: {
+    cursor: "pointer",
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -91,6 +92,7 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
+    mobileMoreAnchorEl_SL: null,
     loggedIn: Boolean(localStorage.author),
     notifications: [],
     notificationMenu: false,
@@ -145,6 +147,14 @@ class PrimarySearchAppBar extends React.Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  handleMobileSignupLoginOpen = event => {
+    this.setState({ mobileMoreAnchorEl_SL: event.currentTarget });
+  };
+
+  handleMobileSignupLoginClose = () => {
+    this.setState({ mobileMoreAnchorEl_SL: null });
+  };
+
   handleLogout = () => {
     localStorage.removeItem("author")
     localStorage.removeItem("token")
@@ -172,10 +182,11 @@ class PrimarySearchAppBar extends React.Component {
 }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, loggedIn, notifications, notificationMenu } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, mobileMoreAnchorEl_SL, loggedIn, notifications, notificationMenu } = this.state;
     const { classes, history } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const isMobileSignupLoginOpen = Boolean(mobileMoreAnchorEl_SL);
 
     const renderMenu = (
       <Menu
@@ -215,6 +226,23 @@ class PrimarySearchAppBar extends React.Component {
       </Menu>
     );
 
+    const renderMobileSignupLogin = (
+      <Menu
+        anchorEl={mobileMoreAnchorEl_SL}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMobileSignupLoginOpen}
+        onClose={this.handleMobileSignupLoginClose}
+      >
+        <MenuItem onClick={() => history.push('/login')}>
+          <Typography style={{paddingLeft: "20px", paddingRight: "20px"}}>Login</Typography>
+        </MenuItem>
+        <MenuItem onClick={() => history.push('/signup')}>
+          <Typography style={{paddingLeft: "20px", paddingRight: "20px"}}color='secondary'>Signup</Typography>
+        </MenuItem>
+      </Menu>
+    );
+
     const renderUserMenu = (
       <React.Fragment>
         <div className={classes.sectionDesktop}>
@@ -247,7 +275,7 @@ class PrimarySearchAppBar extends React.Component {
           <Button className={classes.button} onClick={evt => history.push('/signup')}color="secondary" variant="contained">Sign Up</Button>
         </div>
         <div className={classes.sectionMobile}>
-          <IconButton aria-haspopup="true" color="inherit">
+          <IconButton aria-haspopup="true" color="inherit" onClick={this.handleMobileSignupLoginOpen}>
             <MoreIcon />
           </IconButton>
         </div>
@@ -274,7 +302,7 @@ class PrimarySearchAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} onClick={evt => history.push('/')} variant="h6" color="inherit" noWrap>
+            <Typography style={{cursor: "pointer"}} className={classes.title} onClick={evt => history.push('/')} variant="h6" color="inherit" noWrap>
               Kenzie Overflow
             </Typography>
             <div className={classes.search}>
@@ -296,6 +324,7 @@ class PrimarySearchAppBar extends React.Component {
         {renderNotifications}
         {renderMenu}
         {renderMobileMenu}
+        {renderMobileSignupLogin}
       </div>
     );
   }

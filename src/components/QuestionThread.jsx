@@ -65,7 +65,6 @@ class QuestionThread extends Component {
         })
       })
     let question = await response.json()
-    console.log(question[0])
     this.setState({
       ...this.state,
       question: question[0],
@@ -132,8 +131,9 @@ class QuestionThread extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          question,
-          author: localStorage.author
+          id: question.id,
+          author: localStorage.author,
+          owner: question.author
         })
       })
     const votes = await response.json()
@@ -153,8 +153,9 @@ class QuestionThread extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          question,
-          author: localStorage.author
+          id: question.id,
+          author: localStorage.author,
+          owner: question.author
         })
       })
     const votes = await response.json()
@@ -210,19 +211,17 @@ class QuestionThread extends Component {
         <Card>
         <CardHeader title={question.title}/>
           <CardContent>
-            <Typography>{question.body}</Typography>
+            <pre><Typography>{question.body}</Typography></pre>
 
             <div style={{ display: 'flex' }}>
 
-              <UpvoteButton onClick={this.upvote} />
-
+            {localStorage.author && localStorage.author !== question.author ? <UpvoteButton onClick={this.upvote} /> :  null}
               <Paper style={{ minWidth: '50px' }}>
                 <Typography variant='headline' align='center' style={{ position: 'relative', top: '50%', transform: 'translateY(-50%)' }}>
                   { upvote.length - downvote.length }
                 </Typography>
               </Paper>
-
-              <DownvoteButton onClick={this.downvote} />
+              {localStorage.author && localStorage.author !== question.author ? <DownvoteButton onClick={this.downvote} /> : null}
             </div>
 
             <div>

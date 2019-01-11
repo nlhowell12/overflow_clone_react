@@ -11,7 +11,6 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -28,7 +27,7 @@ class UserProfile extends Component {
     state = {
         author: {},
         favorites: [],
-        open: false
+        open: true
     }
 
 
@@ -67,14 +66,13 @@ class UserProfile extends Component {
                 <List
                     component="nav"
                     subheader={<ListSubheader component="div">Hello {this.state.author.name}, here is some of your general info</ListSubheader>}
-                    className={classes.root}
                 >
                     <ListItem>
                         <ListItemText primary="author" secondary={this.state.author.name} />
                     </ListItem>
                         <Divider light component="li" />
-                    <ListItem>
-                        <ListItemText primary="Bio" secondary={this.state.author.bio} />
+                    <ListItem button onClick={() => history.push('/bio')}>
+                        <ListItemText primary="Bio (click to edit)" secondary={this.state.author.bio} />
                     </ListItem>
                     <Divider light component="li" />
                     <ListItem>
