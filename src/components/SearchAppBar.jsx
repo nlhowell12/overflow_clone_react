@@ -99,10 +99,8 @@ class PrimarySearchAppBar extends React.Component {
     mobileNotificationMenu: false
   };
 
-  componentWillMount = () => {
-    if (localStorage.author) {
+  componentWillMount = () => {    
       this.getNotifications()
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -164,7 +162,8 @@ class PrimarySearchAppBar extends React.Component {
   };
 
   getNotifications = async () => {
-    const response = await fetch('http://localhost:8000/notifications/serve/', {
+    if (localStorage.author) {
+      const response = await fetch('http://localhost:8000/notifications/serve/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -178,6 +177,8 @@ class PrimarySearchAppBar extends React.Component {
       ...this.state,
       notifications: notifications
     })
+    }
+    setTimeout(this.getNotifications, 5000)
 }
 
   render() {

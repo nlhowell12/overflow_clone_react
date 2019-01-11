@@ -40,7 +40,7 @@ class LoginForm extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username,
+                username: username.trim(),
                 password,
               })
         })

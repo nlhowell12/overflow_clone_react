@@ -79,7 +79,7 @@ class QuestionThread extends Component {
 
   getUserInfo = async () => {
     const questionId = parseInt(this.props.match.params.questionId)
-    const author = await fetch('http://localhost:8000/overflow-users/overflow_user/', {
+    const author = await fetch('http://localhost:8000/overflow-users/overflow_user_profile/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
